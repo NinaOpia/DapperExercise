@@ -21,8 +21,8 @@ namespace DapperExercise
 
         public void InsertDepartment(string newDepartmentName)
         {
-			_connection.Execute("SELECT INTO DEPARTMENTS (Name) VALUES (@department);",
-				new { DepartmentName = newDepartmentName });
+			_connection.Execute("INSERT INTO DEPARTMENTS (Name) VALUES (@department);",
+				new { department = newDepartmentName });
         }
     }
 }

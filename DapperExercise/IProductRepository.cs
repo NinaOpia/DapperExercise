@@ -7,9 +7,9 @@ namespace DapperExercise
 
 		public void CreateProduct(string name, double price, int categoryID);
 
-		public void UpdateProduct(int productID, string updateedName);
+        public void DeleteProduct(int productID);
 
-		public void DeleteProduct(int productID);
+        public void UpdateProduct(int productID, string updatedName);
 	}
 }
 

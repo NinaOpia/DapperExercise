@@ -3,6 +3,7 @@ using MySql.Data.MySqlClient;
 using System.Data;
 
 namespace DapperExercise;
+
 class Program
 {
     static void Main(string[] args)
@@ -17,36 +18,93 @@ class Program
 
         var repo = new DapperProductRepository(conn);
 
-        Console.WriteLine("What is the name of your new product?");
-        var prodName = Console.ReadLine();
+        var departments = repo.GetAllProducts();
 
-        Console.WriteLine("What is the price?");
-        var prodPrice = double.Parse(Console.ReadLine());
-
-        Console.WriteLine("What is the category ID?");
-        var prodCat = int.Parse(Console.ReadLine());
-
-        repo.CreateProduct(prodName, prodPrice, prodCat);
-
-        var prodList = repo.GetAllProducts();
-
-        foreach (var prod in prodList)
+        Console.WriteLine("All Departments\n");
+        foreach (var dept in departments)
         {
-            Console.WriteLine($"{prod.ProductID} - {prod.Name}");
+            Console.WriteLine(dept.Name);
         }
 
-        Console.WriteLine("What is the Product ID you want to update?");
+        Console.WriteLine("Please enter a new Department name");
+        var newDeptName = Console.ReadLine();
+
+
+        var instance = new DapperDepartmentRepository(conn);
+        instance.InsertDepartment(newDeptName);
+
+        //Get updated Dept list
+        departments = repo.GetAllProducts();
+
+        Console.WriteLine("All Departments\n");
+        foreach (var dept in departments)
+        {
+            Console.WriteLine(dept.Name);
+        }
+
+        var prodRepo = new DapperProductRepository(conn);
+
+        var products = prodRepo.GetAllProducts();
+
+        Console.WriteLine("All Products\n");
+        foreach (var prod in products)
+        {
+            Console.WriteLine($"{prod.ProductID} {prod.Name} {prod.Price}");
+        }
+        Console.WriteLine();
+
+        Console.WriteLine("What is the name of the new product?");
+        var prodName = Console.ReadLine();
+
+        Console.WriteLine("What is its price?");
+        var prodPrice = double.Parse(Console.ReadLine());
+
+        Console.WriteLine("What is its category ID?");
+        var prodCat = int.Parse(Console.ReadLine());
+
+        prodRepo.CreateProduct(prodName, prodPrice, prodCat);
+
+        products = prodRepo.GetAllProducts();
+
+        Console.WriteLine("All Products\n");
+        foreach (var prod in products)
+        {
+            Console.WriteLine($"{prod.ProductID} {prod.Name} {prod.Price}");
+        }
+        Console.WriteLine();
+
+        //Update Product
+        Console.WriteLine("Enter a ProductID to update");
         var prodID = int.Parse(Console.ReadLine());
 
-        Console.WriteLine("What is the new product name?");
-        var newName = Console.ReadLine();
+        Console.WriteLine("Enter the updated name");
+        var updatedName = Console.ReadLine();
 
-        repo.UpdateProduct(prodID, newName);
+        prodRepo.UpdateProduct(prodID, updatedName);
 
-        Console.WriteLine("What is the product ID you want to delete?");
+        products = prodRepo.GetAllProducts();
+
+        Console.WriteLine("All Products\n");
+        foreach (var prod in products)
+        {
+            Console.WriteLine($"{prod.ProductID} {prod.Name} {prod.Price}");
+        }
+        Console.WriteLine();
+
+        //Delete
+        Console.WriteLine("What is the ProductID you want to delete?");
         prodID = int.Parse(Console.ReadLine());
 
-        repo.DeleteProduct(prodID);
+        prodRepo.DeleteProduct(prodID);
+
+        products = prodRepo.GetAllProducts();
+        Console.WriteLine("All Products\n");
+        foreach (var prod in products)
+        {
+            Console.WriteLine($"{prod.ProductID} {prod.Name} {prod.Price}");
+        }
+        Console.WriteLine();
+
     }
 }
 
